@@ -14,7 +14,7 @@
 
 - **[Official Android Developer Documentation on Kotlin Coroutines](https://developer.android.com/kotlin/coroutines):** Learn about Kotlin Coroutines directly from the official Android Developer documentation.
 - **[kotlinx.coroutines GitHub Repository](https://github.com/Kotlin/kotlinx.coroutines):** Explore the kotlinx.coroutines library on GitHub for more information and resources.
-
+- **[Official Android LifeCycle runtime](https://developer.android.com/jetpack/androidx/releases/lifecycle):** To add a dependency on Lifecycle.
 
 
 ## Dependencies
