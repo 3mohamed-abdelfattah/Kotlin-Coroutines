@@ -26,6 +26,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 }
 ```
+```gradle
+dependencies {
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+}
+```
 
 ## Getting Started
 
