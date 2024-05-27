@@ -12,6 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -28,9 +29,10 @@ class MainActivity : AppCompatActivity() {
 
 
         // This Work on main thread
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(Dispatchers.IO) {
             fakeAPI()
-            Log.d("TAG", "After Coroutine ${Thread.currentThread().name}")
+            Log.d("TAG", "GlobalScope Thread: ${Thread.currentThread().name} ")
+
         }
 
 //        // This Work on any  CoroutineDefaultDispatcher thread
@@ -47,9 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Switching Between Threads to Coroutine
     suspend fun fakeAPI() {
         delay(5500)
-        Log.d("TAG", "fakeAPI: ")
+        Log.d("TAG", "Before Thread : ${Thread.currentThread().name} ")
+        withContext(Dispatchers.Main) {
+            binding.textView.text = "Fake Request"
+            Log.d("TAG", "After Thread: ${Thread.currentThread().name} ")
+        }
     }
 
 
