@@ -1,11 +1,14 @@
 package com.example.coroutines
 
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.coroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -29,10 +32,15 @@ class MainActivity : AppCompatActivity() {
 
 
         // This Work on main thread
-        GlobalScope.launch(Dispatchers.IO) {
-            fakeAPI()
-            Log.d("TAG", "GlobalScope Thread: ${Thread.currentThread().name} ")
+//        GlobalScope.launch(Dispatchers.IO) {
+////            fakeAPI()
+//            repeatLogs()
+//            Log.d("TAG", "GlobalScope Thread: ${Thread.currentThread().name} ")
+//
+//        }
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            repeatLogs()
         }
 
 //        // This Work on any  CoroutineDefaultDispatcher thread
@@ -48,6 +56,20 @@ class MainActivity : AppCompatActivity() {
 //        }
 
     }
+
+
+    suspend fun repeatLogs() {
+        delay(2500)
+        withContext(Dispatchers.Main) {
+            startActivity(Intent(this@MainActivity, SecondActivity::class.java))
+            finish()
+        }
+        while (true) {
+            Log.d("TAG", "Hi, Still Running!!")
+            delay(2000)
+        }
+    }
+
 
     // Switching Between Threads to Coroutine
     suspend fun fakeAPI() {
