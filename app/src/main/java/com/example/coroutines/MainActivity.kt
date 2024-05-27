@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.coroutines.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
@@ -23,14 +26,29 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // For example only to call suspend function
-        runBlocking {
+
+        // This Work on main thread
+        GlobalScope.launch(Dispatchers.Main) {
             fakeAPI()
+            Log.d("TAG", "After Coroutine ${Thread.currentThread().name}")
         }
+
+//        // This Work on any  CoroutineDefaultDispatcher thread
+//        GlobalScope.launch{
+//            fakeAPI()
+//            Log.d("TAG", "After Coroutine ${Thread.currentThread().name}")
+//        }
+
+
+//        // For example only to call suspend function
+//        runBlocking {
+//            fakeAPI()
+//        }
+
     }
 
     suspend fun fakeAPI() {
-        delay(2500)
+        delay(5500)
         Log.d("TAG", "fakeAPI: ")
     }
 
