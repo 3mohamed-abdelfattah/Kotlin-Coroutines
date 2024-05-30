@@ -10,8 +10,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.coroutines.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -19,6 +21,7 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    val customScope = CoroutineScope(Dispatchers.Default)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -39,7 +42,14 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
-        lifecycleScope.launch(Dispatchers.IO) {
+//        //lifecycleScope
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            repeatLogs()
+//        }
+
+
+        //CoroutineScope
+        customScope.launch(Dispatchers.IO) {
             repeatLogs()
         }
 
@@ -81,5 +91,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        customScope.cancel()
+    }
 
 }
