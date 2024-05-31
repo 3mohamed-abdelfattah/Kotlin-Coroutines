@@ -21,7 +21,8 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    val customScope = CoroutineScope(Dispatchers.Default)
+
+    //    val customScope = CoroutineScope(Dispatchers.Default)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -49,8 +50,15 @@ class MainActivity : AppCompatActivity() {
 
 
         //CoroutineScope
-        customScope.launch(Dispatchers.IO) {
-            repeatLogs()
+        // Multiple Jobs
+        val jobParent = lifecycleScope.launch {
+            val job1 = launch { repeatLogs() }
+            val job2 = launch { repeatLogs2() }
+        }
+
+        // TO cancel request after clicking button
+        binding.btnCancel.setOnClickListener {
+            jobParent.cancel()
         }
 
 //        // This Work on any  CoroutineDefaultDispatcher thread
@@ -69,15 +77,26 @@ class MainActivity : AppCompatActivity() {
 
 
     suspend fun repeatLogs() {
-        delay(2500)
-        withContext(Dispatchers.Main) {
-            startActivity(Intent(this@MainActivity, SecondActivity::class.java))
-            finish()
-        }
+
+
         while (true) {
-            Log.d("TAG", "Hi, Still Running!!")
-            delay(2000)
+            delay(5000)
+            Log.d("TAG", "Hi, Still Running response 1!!")
         }
+
+
+//        delay(2500)
+//        withContext(Dispatchers.Main) {
+//            startActivity(Intent(this@MainActivity, SecondActivity::class.java))
+//            finish()
+//        }
+
+    }
+
+
+    suspend fun repeatLogs2() {
+        delay(3000)
+        Log.d("TAG", "Hi, Still Running response 2 !!")
     }
 
 
@@ -92,9 +111,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        customScope.cancel()
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        customScope.cancel()
+//    }
 
 }

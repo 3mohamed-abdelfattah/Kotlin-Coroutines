@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Coroutines</string>
     <string name="second_activity">Second Activity</string>
+    <string name="cancel">Cancel</string>
 </resources>
