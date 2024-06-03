@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        var firstRes: String? = null
+        var secondRes: String? = null
+
 
         // This Work on main thread
 //        GlobalScope.launch(Dispatchers.IO) {
@@ -52,9 +55,16 @@ class MainActivity : AppCompatActivity() {
         //CoroutineScope
         // Multiple Jobs
         val jobParent = lifecycleScope.launch {
-            val job1 = launch { repeatLogs() }
-            val job2 = launch { repeatLogs2() }
+            val job1 = launch { firstRes = repeatLogs() }
+            val job2 = launch { secondRes = repeatLogs2() }
+
+            //Coroutines join jobs
+            job1.join()
+            job2.join()
+            Log.d(TAG, firstRes.toString())
+            Log.d(TAG, secondRes.toString())
         }
+
 
         // TO cancel request after clicking button
         binding.btnCancel.setOnClickListener {
@@ -76,12 +86,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    suspend fun repeatLogs() {
+    suspend fun repeatLogs(): String {
 
 
         while (true) {
             delay(5000)
             Log.d("TAG", "Hi, Still Running response 1!!")
+            return "Hi,Response 1"
         }
 
 
@@ -94,9 +105,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    suspend fun repeatLogs2() {
+    suspend fun repeatLogs2(): String {
         delay(3000)
         Log.d("TAG", "Hi, Still Running response 2 !!")
+        return "Hi,Response 2"
     }
 
 
