@@ -10,12 +10,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class FlowActivity : AppCompatActivity() {
@@ -31,9 +33,24 @@ class FlowActivity : AppCompatActivity() {
 
 //        playFlow()
 //        playFlowMap()
-        playFlowError()
+//        playFlowError()
+        playFlowCasting()
+
     }
 
+    //casting to flow
+    private fun playFlowCasting() {
+        val mList = listOf("Mohamed", "Esraa", "Samy")
+        val mFlow = mList.asFlow().onEach {
+            delay(2000)
+        }
+
+        lifecycleScope.launch {
+            mFlow.collect {
+                Log.d(TAG, "playFlowCasting:$it ")
+            }
+        }
+    }
 
     // Use Filter And Map in flow
     private fun playFlowMap() {
@@ -95,5 +112,9 @@ class FlowActivity : AppCompatActivity() {
         }
     }
 
+
+    companion object {
+        private const val TAG = "playFlow"
+    }
 
 }
