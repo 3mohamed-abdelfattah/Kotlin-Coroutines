@@ -13,6 +13,7 @@ import com.example.coroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -55,29 +56,29 @@ class MainActivity : AppCompatActivity() {
 
         //CoroutineScope
         // Multiple Jobs
-        val jobParent = lifecycleScope.launch {
-
-            //Coroutines async, await, deferred
-            val deferred1 = async { repeatLogs() }
-            val deferred2 = async { repeatLogs2() }
-
-            Log.d(TAG, deferred1.await())
-            Log.d(TAG, deferred2.await())
+//        val jobParent = lifecycleScope.launch {
+//
+//            //Coroutines async, await, deferred
+//            val deferred1 = async { repeatLogs() }
+//            val deferred2 = async { repeatLogs2() }
+//
+//            Log.d(TAG, deferred1.await())
+//            Log.d(TAG, deferred2.await())
 
 //            val job1 = async { firstRes = repeatLogs() }
 //            val job2 = async { secondRes = repeatLogs2() }
-            //Coroutines join jobs
+        //Coroutines join jobs
 //            job1.join()
 //            job2.join()
 //            Log.d(TAG, firstRes.toString())
 //            Log.d(TAG, secondRes.toString())
-        }
+//        }
 
 
         // TO cancel request after clicking button
-        binding.btnCancel.setOnClickListener {
-            jobParent.cancel()
-        }
+//        binding.btnCancel.setOnClickListener {
+//            jobParent.cancel()
+//        }
 
 //        // This Work on any  CoroutineDefaultDispatcher thread
 //        GlobalScope.launch{
@@ -91,6 +92,42 @@ class MainActivity : AppCompatActivity() {
 //            fakeAPI()
 //        }
 
+
+        playCoroutine()
+        binding.btnCancel.setOnClickListener {
+            job4.cancel()
+        }
+
+    }
+
+    //structured concerncy
+
+    lateinit var job1: Job
+    lateinit var job2: Job
+    lateinit var job3: Job
+    lateinit var job4: Job
+    lateinit var job5: Job
+    private fun playCoroutine() {
+        job1 = lifecycleScope.launch {
+            delay(5000)
+            job2 = launch {
+                delay(2000)
+                Log.d("TAG", "playCoroutine: Job 2")
+                job4 = launch {
+                    delay(2000)
+                    Log.d("TAG", "playCoroutine: Job 4")
+                }
+                job5 = launch {
+                    delay(2000)
+                    Log.d("TAG", "playCoroutine: Job 5")
+                }
+            }
+            job3 = launch {
+                delay(2000)
+                Log.d("TAG", "playCoroutine: Job 3")
+            }
+            Log.d("TAG", "playCoroutine: Job 1")
+        }
     }
 
 
