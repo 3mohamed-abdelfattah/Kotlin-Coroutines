@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.coroutines.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -108,7 +109,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var job4: Job
     lateinit var job5: Job
     private fun playCoroutine() {
-        job1 = lifecycleScope.launch {
+
+        // Handling exceptions in Coroutines
+        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.d(TAG, throwable.message.toString())
+        }
+
+        job1 = lifecycleScope.launch(exceptionHandler) {
             delay(5000)
             job2 = launch {
                 delay(2000)
@@ -124,6 +131,8 @@ class MainActivity : AppCompatActivity() {
             }
             job3 = launch {
                 delay(2000)
+                //divide by zero to Handling exceptions in Coroutines
+                val result = 5 / 0
                 Log.d("TAG", "playCoroutine: Job 3")
             }
             Log.d("TAG", "playCoroutine: Job 1")
