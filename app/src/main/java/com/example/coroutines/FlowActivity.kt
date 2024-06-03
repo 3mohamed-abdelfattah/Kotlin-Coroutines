@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
@@ -34,9 +35,27 @@ class FlowActivity : AppCompatActivity() {
 //        playFlow()
 //        playFlowMap()
 //        playFlowError()
-        playFlowCasting()
-
+//        playFlowCasting()
+        playFlowBuffer()
     }
+
+    //Buffer with kotlin flow
+    private fun playFlowBuffer() {
+        val mFlow = flow<Int> {
+            for (i in 1 until 25) {
+                emit(i)
+                delay(1000)
+            }
+        }
+
+        lifecycleScope.launch {
+            mFlow.buffer().collect {
+                delay(2000)
+                Log.d(TAG, "playFlowBuffer:$it ")
+            }
+        }
+    }
+
 
     //casting to flow
     private fun playFlowCasting() {
