@@ -13,6 +13,7 @@ import com.example.coroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,8 +35,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        var firstRes: String? = null
-        var secondRes: String? = null
+//        var firstRes: String? = null
+//        var secondRes: String? = null
 
 
         // This Work on main thread
@@ -55,14 +56,21 @@ class MainActivity : AppCompatActivity() {
         //CoroutineScope
         // Multiple Jobs
         val jobParent = lifecycleScope.launch {
-            val job1 = launch { firstRes = repeatLogs() }
-            val job2 = launch { secondRes = repeatLogs2() }
 
+            //Coroutines async, await, deferred
+            val deferred1 = async { repeatLogs() }
+            val deferred2 = async { repeatLogs2() }
+
+            Log.d(TAG, deferred1.await())
+            Log.d(TAG, deferred2.await())
+
+//            val job1 = async { firstRes = repeatLogs() }
+//            val job2 = async { secondRes = repeatLogs2() }
             //Coroutines join jobs
-            job1.join()
-            job2.join()
-            Log.d(TAG, firstRes.toString())
-            Log.d(TAG, secondRes.toString())
+//            job1.join()
+//            job2.join()
+//            Log.d(TAG, firstRes.toString())
+//            Log.d(TAG, secondRes.toString())
         }
 
 
